@@ -66,8 +66,14 @@ protected:
 				|| (std::abs(pstd.getVelocityTheta()) >= stopped_vel_th_threshold_);
 			pcohan.state = moving ? human_msgs::TrackedHuman::MOVING : human_msgs::TrackedHuman::STOPPED;
 
-			// copy track ID
-			pcohan.track_id = pstd.getID();
+			/*
+			 * Conversion from track name to track ID.
+			 *
+			 * NOTE: for tracks obtained from SPENCER perception stack, this will be valid.
+			 * However, with approaches that name people with, e.g., literals, this will produce a runtime error.
+			 * E.g. UUIDv5 should be used then.
+			 */
+			pcohan.track_id = std::stoul(pstd.getName());
 
 			// copy tracking data to a segment
 			human_msgs::TrackedSegment segment;
